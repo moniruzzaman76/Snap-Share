@@ -4,6 +4,8 @@ import 'package:snapshare/app/state_holder_binders.dart';
 import 'package:snapshare/utils/theme.dart';
 import 'package:snapshare/view/screen/main_bottom_navigation_screen.dart';
 
+import '../view/screen/splash_screen.dart';
+
 class SnapShare extends StatelessWidget {
   const SnapShare({super.key});
 
