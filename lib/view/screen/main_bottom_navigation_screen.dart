@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:snapshare/utils/constant.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:snapshare/view/screen/searching_photo_scree.dart';
 import 'package:snapshare/view/screen/upload_user_photo_screen.dart';
 import '../../state_holders/main_bottom_nav_controller.dart';
 import '../../utils/colors.dart';
-import '../widget/upload_photo_alertdialog.dart';
+import '../widget/upload_photo_alert_dialog.dart';
 import 'home_screen.dart';
 import 'my_profile_screen.dart';
 
@@ -28,6 +25,7 @@ class _MainBottomNavigationScreenState extends State<MainBottomNavigationScreen>
     const MyProfileScreen(),
   ];
 
+
   @override
   Widget build(BuildContext context) {
     Theme.of(context).brightness;
@@ -37,8 +35,15 @@ class _MainBottomNavigationScreenState extends State<MainBottomNavigationScreen>
             body: _screens[controller.selectedIndex],
             bottomNavigationBar: BottomNavigationBar(
               currentIndex: controller.selectedIndex,
-              onTap: controller.changeScreen,
-
+              onTap: (index) {
+                if (index == 2) {
+                  uploadPhotoAlertDialog(context);
+                  controller.changeScreen(0); // Reset to home after showing the dialog
+                } else {
+                  // Handle taps for other buttons
+                  controller.changeScreen(index);
+                }
+              },
               backgroundColor: Theme.of(context).brightness == Brightness.dark ?
               AppColors.darkBackgroundColor : AppColors.lightBackgroundColor,
               selectedItemColor: AppColors.primaryColor,
@@ -46,7 +51,7 @@ class _MainBottomNavigationScreenState extends State<MainBottomNavigationScreen>
               AppColors.lightBackgroundColor : AppColors.darkBackgroundColor,
               showUnselectedLabels: false,
               elevation: 0,
-              // type: BottomNavigationBarType.fixed,
+              type: BottomNavigationBarType.fixed,
 
               items: const [
                 BottomNavigationBarItem(
@@ -65,3 +70,6 @@ class _MainBottomNavigationScreenState extends State<MainBottomNavigationScreen>
   }
 
 }
+
+
+

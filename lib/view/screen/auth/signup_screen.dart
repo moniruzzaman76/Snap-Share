@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:snapshare/utils/colors.dart';
 import 'package:snapshare/utils/constant.dart';
 import 'package:snapshare/view/screen/auth/login_screen.dart';
+import 'package:snapshare/view/screen/main_bottom_navigation_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});

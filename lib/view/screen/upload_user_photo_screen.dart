@@ -1,75 +1,37 @@
-import 'package:flutter/material.dart';
+import 'dart:typed_data';
 
-class UploadUserPhotoScreen extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../../utils/constant.dart';
+import '../widget/upload_photo_alert_dialog.dart';
+
+class UploadUserPhotoScreen extends StatefulWidget {
   const UploadUserPhotoScreen({super.key});
 
   @override
+  State<UploadUserPhotoScreen> createState() => _UploadUserPhotoScreenState();
+}
+
+class _UploadUserPhotoScreenState extends State<UploadUserPhotoScreen> {
+
+
+
+ @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_){
+    uploadPhotoAlertDialog(context);
+    });
+  }
+
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: SizedBox(
-          height: 50,
-          width: 150,
-          child: Column(
-            children: [
-              uploadPhotoAlertDialog(context)
-            ],
-          ),
-        ),
-      ),
-
-    );
+    return  const Scaffold();
   }
 
-  uploadPhotoAlertDialog(context){
-    return showDialog(
-        context: context,
-        builder: (context){
-          return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5)
-            ),
-            child: const SizedBox(
-              height: 200,
-              child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text('Select from',style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            fontSize: 15,
-                            color: Colors.black87
-                        ),),
-                        SizedBox(height: 30,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Column(
-                              children: [
-                                Icon(Icons.camera_alt_outlined,size: 80,color: Colors.black54,
-                                ),
-                                Text('Camera'),
-                              ],
-                            ),
-                            SizedBox(width: 20,),
-                            Column(
-                              children: [
-                                Icon(Icons.photo_outlined,size: 80,color: Colors.black54,),
-                                Text('Gallery'),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ]
-                  )
-              ),
-            ),
-          );
-        }
-    );
-  }
+
 
 }
 
