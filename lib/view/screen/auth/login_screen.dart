@@ -1,11 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:iconsax/iconsax.dart';
-
-
-import '../main_bottom_navigation_screen.dart';
-
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -36,6 +32,27 @@ class _LoginScreenState extends State<LoginScreen> {
           emailAddressController.text.isNotEmpty && passwordController.text.isNotEmpty;
     });
   }
+
+
+  void login(){
+    FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: emailAddressController.text,
+      password: passwordController.text,
+    ).then((value){
+      Get.snackbar(
+          "Success", "Login has been done",
+          colorText: Colors.white,
+          backgroundColor: Colors.green.shade500
+      );
+    }).onError((error, stackTrace){
+      Get.snackbar(
+          "Failed!", "Please try Again",
+          colorText: Colors.white,
+          backgroundColor: Colors.red.shade500
+      );
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (value == null || value.isEmpty) {
                         return 'Required field is empty';
                       }
-                      if (value.length < 8) {
+                      if (value.length < 6) {
                         return 'The password must be at least 8 characters long';
                       }
                       return null;
@@ -151,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: (emailAddressController.text.isNotEmpty &&
                       passwordController.text.isNotEmpty) ? () {
                         if (_logInFormKey.currentState!.validate()) {
-                          Get.to(()=> const MainBottomNavigationScreen());
+                          login();
                         }
                       } : null,
                       child: const Text("Log In"),
