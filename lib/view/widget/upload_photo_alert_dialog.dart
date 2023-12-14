@@ -6,7 +6,9 @@ import '../../utils/constant.dart';
 
 Uint8List? _profileImage;
 
-uploadPhotoAlertDialog(BuildContext context){
+
+Future<void> uploadPhotoAlertDialog(BuildContext context) async{
+
 
   return showDialog(
       context: context,
@@ -26,7 +28,8 @@ uploadPhotoAlertDialog(BuildContext context){
                       Text('Select from',style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w500
                       ),),
-                       Row(
+                      Row(
+
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -63,7 +66,6 @@ uploadPhotoAlertDialog(BuildContext context){
         );
       }
   );
-
 }
 Future<void> selectImageFromCamera() async {
   ImagePicker _imagePicker = ImagePicker();
@@ -86,7 +88,5 @@ Future<void> selectImageFromGallery() async {
     // setState(() {
     // });
     _profileImage = image;
-
   }
 }
-
