@@ -1,6 +1,4 @@
 import 'dart:typed_data';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -8,7 +6,9 @@ import '../../utils/constant.dart';
 
 Uint8List? _profileImage;
 
+
 Future<void> uploadPhotoAlertDialog(BuildContext context) async{
+
 
   return showDialog(
       context: context,
@@ -29,6 +29,7 @@ Future<void> uploadPhotoAlertDialog(BuildContext context) async{
                           fontWeight: FontWeight.w500
                       ),),
                       Row(
+
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -65,8 +66,6 @@ Future<void> uploadPhotoAlertDialog(BuildContext context) async{
         );
       }
   );
-
-
 }
 Future<void> selectImageFromCamera() async {
   ImagePicker _imagePicker = ImagePicker();
@@ -89,7 +88,5 @@ Future<void> selectImageFromGallery() async {
     // setState(() {
     // });
     _profileImage = image;
-
-
   }
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1003062096291",
+    "project_id": "snap-share-t6",
+    "storage_bucket": "snap-share-t6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1003062096291:android:8e110379f73d4d1e2a2a16",
+        "android_client_info": {
+          "package_name": "com.probatchsix.snapshare.snapshare"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFr1SvogzqI_azhBSkRsOQhep1kBKE3Zo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:snapshare/app/state_holder_binders.dart';
 import 'package:snapshare/utils/theme.dart';
-import 'package:snapshare/view/screen/main_bottom_navigation_screen.dart';
+
+import '../view/screen/splash_screen.dart';
 
 import '../view/screen/splash_screen.dart';
 
