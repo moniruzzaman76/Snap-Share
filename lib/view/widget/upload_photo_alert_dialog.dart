@@ -90,5 +90,6 @@ Future<void> selectImageFromGallery() async {
     // });
     _profileImage = image;
 
+
   }
 }
