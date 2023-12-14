@@ -14,7 +14,7 @@ A simplified photo-sharing app for connecting with friends
 - Light/dark mode theme
 
 ### User Interface
-![Screenshot_20231210_182532](https://github.com/BIPLOB-SHIL/Ostad_Flutter_Batch_03-Assignment16/assets/112534902/0ffdc3d2-ab1f-4ea2-875d-543de23a61ad)
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/112534902/289357962-0ffdc3d2-ab1f-4ea2-875d-543de23a61ad.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20231214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20231214T133347Z&X-Amz-Expires=300&X-Amz-Signature=a384c365d23f6314258d2a526791249207d6e6e855e0bebcff61f9b7560510da&X-Amz-SignedHeaders=host&actor_id=98202630&key_id=0&repo_id=715112234" width="200" height="400" />
 
 ### Used Packages
 - ```get: ^4.6.6 ```: State management

@@ -1,9 +1,8 @@
+import 'dart:developer';
 import 'dart:typed_data';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_utils/src/get_utils/get_utils.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:snapshare/utils/colors.dart';
@@ -23,10 +22,46 @@ class _SignupScreenState extends State<SignupScreen> {
   final _signUpFormKey = GlobalKey<FormState>();
   Uint8List? _profileImage;
 
+
   final TextEditingController userNameController = TextEditingController();
   final TextEditingController emailAddressController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
+
+
+
+
+  Future<void> _signUpWithEmailAndPassword() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+
+    try {
+      await auth.createUserWithEmailAndPassword(
+        email: emailAddressController.text,
+        password: passwordController.text,
+      );
+      // After successful sign-up, you may want to update user information
+      User? user = auth.currentUser;
+      if (user != null) {
+        //await user.updatePhotoURL(""); // You can set a URL for a profile photo if needed
+        await user.updateDisplayName(userNameController.text);
+      }
+        Get.snackbar(
+            "Success", "Sing Up has been done",
+          colorText: Colors.white,
+          backgroundColor: Colors.green.shade500
+        );
+      Get.to(()=>  const LoginScreen());
+
+    } catch (e) {
+      log("Error during sign-up: $e");
+      Get.snackbar(
+          "Failed!", "Please try Again",
+          colorText: Colors.white,
+          backgroundColor: Colors.red.shade500
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +206,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       if (value == null || value.isEmpty) {
                         return 'Required field is empty';
                       }
-                      if (value.length < 8) {
+                      if (value.length < 6) {
                         return 'The password must be at least 8 characters long';
                       }
                       return null;
@@ -180,23 +215,23 @@ class _SignupScreenState extends State<SignupScreen> {
                   const SizedBox(
                     height: 16,
                   ),
-                  Text("Bio",
-                      style: Theme.of(context).textTheme.headlineSmall),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  TextFormField(
-                      controller: bioController,
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                          hintText: "Bio",
-                          prefixIcon: Icon(Iconsax.info_circle)),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Required field is empty';
-                        }
-                        return null;
-                      },),
+                  // Text("Bio",
+                  //     style: Theme.of(context).textTheme.headlineSmall),
+                  // const SizedBox(
+                  //   height: 16,
+                  // ),
+                  // TextFormField(
+                  //     controller: bioController,
+                  //     keyboardType: TextInputType.text,
+                  //     decoration: const InputDecoration(
+                  //         hintText: "Bio",
+                  //         prefixIcon: Icon(Iconsax.info_circle)),
+                  //     validator: (value) {
+                  //       if (value == null || value.isEmpty) {
+                  //         return 'Required field is empty';
+                  //       }
+                  //       return null;
+                  //     },),
                   const SizedBox(
                     height: 16,
                   ),
@@ -205,7 +240,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (_signUpFormKey.currentState!.validate()) {
-                          Get.to(()=> const MainBottomNavigationScreen());
+                          _signUpWithEmailAndPassword();
                         }
                       },
                       child: const Text("Sign Up"),
