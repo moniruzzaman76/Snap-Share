@@ -22,44 +22,47 @@ class _HomeScreenState extends State<HomeScreen> {
           preferredSize: Size.fromHeight(70),
           child: HomeScreenAppBar()
       ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 180,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return const MyProfileStory();
-                  }
-                  return const OtherProfileStory();
-                }),
-          ),
-          Container(
-            height: 16,
-            color: Colors.grey.shade200,
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 20,
-              itemBuilder: (context,index){
-                return   UserPostCard(
-                    onTab: (){
-                      homePageBottomModelSheet();
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 180,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return const MyProfileStory();
                     }
-                );
-              },
-
+                    return const OtherProfileStory();
+                  }),
             ),
-          )
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              height: 16,
+              color: Colors.grey.shade200,
+            ),
+          ),
+
+          SliverList(
+              delegate: SliverChildBuilderDelegate(
+                childCount: 20,
+                      (context,index){
+                  return UserPostCard(
+                      onTab: (){
+                        homePageBottomModelSheet();
+                      }
+                  );
+              }
+
+          ))
 
         ],
       ),
     );
   }
-
 
 
   Future<void>homePageBottomModelSheet()async {
