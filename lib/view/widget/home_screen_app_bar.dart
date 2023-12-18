@@ -32,7 +32,8 @@ class HomeScreenAppBar extends StatelessWidget {
                 icon: Iconsax.user,
               ),
               const Spacer(),
-              Image(image: AssetImage(
+              Image(
+                image: AssetImage(
                   Theme.of(context).brightness == Brightness.dark ?
                   Constant.socialLiveTextLogoWhitePNG:
                   Constant.socialLiveTextLogoBlackPNG
