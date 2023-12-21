@@ -1,7 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:iconsax/iconsax.dart';
+import '../../../state_holders/login_controller.dart';
+import '../../widget/show_snackbar.dart';
+import '../main_bottom_navigation_screen.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -33,27 +37,6 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-
-  void login(){
-    FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: emailAddressController.text,
-      password: passwordController.text,
-    ).then((value){
-      Get.snackbar(
-          "Success", "Login has been done",
-          colorText: Colors.white,
-          backgroundColor: Colors.green.shade500
-      );
-    }).onError((error, stackTrace){
-      Get.snackbar(
-          "Failed!", "Please try Again",
-          colorText: Colors.white,
-          backgroundColor: Colors.red.shade500
-      );
-    });
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,21 +60,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text("Enter your email and password",
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontSize: 20
-                      ),),
+                    ),),
                   const SizedBox(
                     height: 60,
                   ),
-                   Text("Email",
+                  Text("Email",
                       style: Theme.of(context).textTheme.headlineSmall),
                   const SizedBox(height: 16,),
                   TextFormField(
                       controller: emailAddressController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
-                        hintText: "Input Email",
-                        prefixIcon: Icon(Iconsax.sms)
+                          hintText: "Input Email",
+                          prefixIcon: Icon(Iconsax.sms)
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -125,14 +108,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           icon: _isPasswordVisible
                               ? const Icon(Iconsax.eye_slash)
                               : const Icon(
-                                  Iconsax.eye,
-                                ),
+                            Iconsax.eye,
+                          ),
                         )),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Required field is empty';
                       }
-                      if (value.length < 6) {
+                      if (value.length < 8) {
                         return 'The password must be at least 8 characters long';
                       }
                       return null;
@@ -162,17 +145,39 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 16,
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: (emailAddressController.text.isNotEmpty &&
-                      passwordController.text.isNotEmpty) ? () {
-                        if (_logInFormKey.currentState!.validate()) {
-                          login();
+                  GetBuilder<LoginController>(
+                      builder: (loginController) {
+                        if(loginController.loginInProgress){
+                          return const Center(
+                            child: CircularProgressIndicator(
+                            ),
+                          );
                         }
-                      } : null,
-                      child: const Text("Log In"),
-                    ),
+                        return SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton (
+                            onPressed: (emailAddressController.text.isNotEmpty &&
+                                passwordController.text.isNotEmpty) ? () async{
+                              if (_logInFormKey.currentState!.validate()) {
+                                String message = await loginController.loginUser(
+                                    emailAddressController.text,
+                                    passwordController.text);
+                                if (message == "success"){
+                                  if (mounted){
+                                    showSnackBar(loginController.message, context,Colors.green[500], true);
+                                    Get.to(()=> const MainBottomNavigationScreen());
+                                  }
+                                }else{
+                                  if (mounted){
+                                    showSnackBar(loginController.message, context, Colors.red[500], false);
+                                  }
+                                }
+                              }
+                            } : null,
+                            child: const Text("Log In"),
+                          ),
+                        );
+                      }
                   ),
                 ],
               ),
