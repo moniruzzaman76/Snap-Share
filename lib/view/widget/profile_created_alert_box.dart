@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ProfileCreatedAlertBox extends StatelessWidget {
-  const ProfileCreatedAlertBox({super.key, required this.onTab});
+  const ProfileCreatedAlertBox(
+      {super.key,
+        required this.onTab
+      });
 
   final VoidCallback onTab;
 
@@ -63,7 +66,7 @@ class ProfileCreatedAlertBox extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4)),
                   ),
-                  onPressed: onTab,
+                  onPressed:onTab,
                   child: const Text(
                     "update",
                     style: TextStyle(color: Colors.white, fontSize: 14),
@@ -75,7 +78,7 @@ class ProfileCreatedAlertBox extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 hoverColor: const Color(0xFFD0D5DD),
-                child: const Row(
+                child:  const Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
