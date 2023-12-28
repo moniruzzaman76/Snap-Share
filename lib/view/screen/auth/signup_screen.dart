@@ -1,14 +1,15 @@
-import 'dart:developer';
 import 'dart:typed_data';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_utils/src/get_utils/get_utils.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:snapshare/utils/colors.dart';
-import 'package:snapshare/utils/constant.dart';
-import 'package:snapshare/view/screen/auth/login_screen.dart';
-import 'package:snapshare/view/screen/main_bottom_navigation_screen.dart';
+import '../../../state_holders/signup_controller.dart';
+import '../../../utils/constant.dart';
+import '../../widget/show_snackbar.dart';
+import '../main_bottom_navigation_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -22,46 +23,10 @@ class _SignupScreenState extends State<SignupScreen> {
   final _signUpFormKey = GlobalKey<FormState>();
   Uint8List? _profileImage;
 
-
   final TextEditingController userNameController = TextEditingController();
   final TextEditingController emailAddressController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
-
-
-
-
-  Future<void> _signUpWithEmailAndPassword() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-
-    try {
-      await auth.createUserWithEmailAndPassword(
-        email: emailAddressController.text,
-        password: passwordController.text,
-      );
-      // After successful sign-up, you may want to update user information
-      User? user = auth.currentUser;
-      if (user != null) {
-        //await user.updatePhotoURL(""); // You can set a URL for a profile photo if needed
-        await user.updateDisplayName(userNameController.text);
-      }
-        Get.snackbar(
-            "Success", "Sing Up has been done",
-          colorText: Colors.white,
-          backgroundColor: Colors.green.shade500
-        );
-      Get.to(()=>  const LoginScreen());
-
-    } catch (e) {
-      log("Error during sign-up: $e");
-      Get.snackbar(
-          "Failed!", "Please try Again",
-          colorText: Colors.white,
-          backgroundColor: Colors.red.shade500
-      );
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -90,21 +55,27 @@ class _SignupScreenState extends State<SignupScreen> {
                 children: [
                   Stack(
                     children: [
-                       Center(
-                        child: _profileImage != null ? CircleAvatar(
-                          radius: screenWidth * 0.160,
-                          backgroundColor: const Color(0xFF4478FF),
-                          child: CircleAvatar(
-                            backgroundColor: Colors.white,
-                            backgroundImage: MemoryImage(_profileImage!),
-                            radius: screenWidth * 0.155,
-                          ),
-                        ) : CircleAvatar(
-                          backgroundColor: Colors.white,
-                          backgroundImage:
-                          const AssetImage(Constant.profilePicturePlaceholderPNG),
-                          radius: screenWidth * 0.155,
-                        ),
+                      Center(
+                        child: _profileImage != null
+                            ? CircleAvatar(
+                                radius: screenWidth * 0.160,
+                                backgroundColor: const Color(0xFF4478FF),
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  backgroundImage: MemoryImage(_profileImage!),
+                                  radius: screenWidth * 0.155,
+                                ),
+                              )
+                            : CircleAvatar(
+                                radius: screenWidth * 0.160,
+                                backgroundColor: const Color(0xFF4478FF),
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  backgroundImage: const AssetImage(
+                                      Constant.profilePicturePlaceholderPNG),
+                                  radius: screenWidth * 0.155,
+                                ),
+                              ),
                       ),
                       Positioned(
                         bottom: screenHeight * 0.001,
@@ -117,12 +88,15 @@ class _SignupScreenState extends State<SignupScreen> {
                             backgroundColor: Colors.grey.shade300,
                             child: IconButton(
                               onPressed: () {
-                                selectImage();
+                                selectImageFromGallery();
+                                if (mounted) {
+                                  setState(() {});
+                                }
                               },
                               icon: const Icon(
                                 Iconsax.camera,
                                 size: 20,
-                                color: Colors.black ,
+                                color: Colors.black,
                               ),
                             ),
                           ),
@@ -206,7 +180,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       if (value == null || value.isEmpty) {
                         return 'Required field is empty';
                       }
-                      if (value.length < 6) {
+                      if (value.length < 8) {
                         return 'The password must be at least 8 characters long';
                       }
                       return null;
@@ -215,37 +189,62 @@ class _SignupScreenState extends State<SignupScreen> {
                   const SizedBox(
                     height: 16,
                   ),
-                  // Text("Bio",
-                  //     style: Theme.of(context).textTheme.headlineSmall),
-                  // const SizedBox(
-                  //   height: 16,
-                  // ),
-                  // TextFormField(
-                  //     controller: bioController,
-                  //     keyboardType: TextInputType.text,
-                  //     decoration: const InputDecoration(
-                  //         hintText: "Bio",
-                  //         prefixIcon: Icon(Iconsax.info_circle)),
-                  //     validator: (value) {
-                  //       if (value == null || value.isEmpty) {
-                  //         return 'Required field is empty';
-                  //       }
-                  //       return null;
-                  //     },),
+                  Text("Bio", style: Theme.of(context).textTheme.headlineSmall),
                   const SizedBox(
                     height: 16,
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (_signUpFormKey.currentState!.validate()) {
-                          _signUpWithEmailAndPassword();
-                        }
-                      },
-                      child: const Text("Sign Up"),
-                    ),
+                  TextFormField(
+                    controller: bioController,
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
+                        hintText: "Bio", prefixIcon: Icon(Iconsax.info_circle)),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Required field is empty';
+                      }
+                      return null;
+                    },
                   ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  GetBuilder<SignupController>(builder: (signupController) {
+                    if (signupController.signUpInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (_signUpFormKey.currentState!.validate()) {
+                            String message = await signupController.signupUser(
+                                userNameController.text,
+                                emailAddressController.text,
+                                passwordController.text,
+                                bioController.text,
+                                _profileImage!);
+
+                            if (message == "success") {
+                              if (mounted) {
+                                showSnackBar(signupController.message, context,
+                                    Colors.green[500], true);
+                                Get.to(
+                                    () => const MainBottomNavigationScreen());
+                              }
+                            } else {
+                              if (mounted) {
+                                showSnackBar(signupController.message, context,
+                                    Colors.red[500], false);
+                              }
+                            }
+                          }
+                        },
+                        child: const Text("Sign Up"),
+                      ),
+                    );
+                  }),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -258,11 +257,13 @@ class _SignupScreenState extends State<SignupScreen> {
                         onPressed: () {
                           Get.back();
                         },
-                        child:  Text("Log In",
-                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: AppColors.primaryColor,
-                              fontWeight: FontWeight.w600
-                            )),
+                        child: Text("Log In",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(
+                                    color: AppColors.primaryColor,
+                                    fontWeight: FontWeight.w600)),
                       ),
                     ],
                   ),
@@ -272,20 +273,17 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         ),
       ),
-
     );
   }
 
-  Future<void> selectImage() async {
-     ImagePicker _imagePicker = ImagePicker();
-     XFile? _file = await _imagePicker.pickImage(source: ImageSource.gallery);
+  Future<void> selectImageFromGallery() async {
+    ImagePicker _imagePicker = ImagePicker();
+    XFile? _file = await _imagePicker.pickImage(source: ImageSource.gallery);
 
-     if (_file != null) {
-       Uint8List image = await _file.readAsBytes();
-       setState(() {
-       });
-       _profileImage = image;
-
-     }
+    if (_file != null) {
+      Uint8List image = await _file.readAsBytes();
+      setState(() {});
+      _profileImage = image;
+    }
   }
 }
